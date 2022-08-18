@@ -31,7 +31,7 @@ public class BookService {
     @Autowired
     private CheckoutRepository checkoutRepository;
 
-    public List<Book> getAllBooks() {
+    public List<Book> getBooks() {
         return bookRepository.findAll();
     }
 
@@ -39,11 +39,11 @@ public class BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
-    public void addBook(String authorization, Book book) {
+    public void createBook(String authorization, Book book) {
         Session session = sessionService.validateSession(authorization);
 
         if (session == null) {
-            throw new BadCredentialsException("Invalid session ID");
+            throw new BadCredentialsException("Invalid session");
         }
 
         if (userRepository.findByUserID(session.getUserID()).getRole() != User.Role.ADMIN) {
@@ -61,7 +61,7 @@ public class BookService {
         Session session = sessionService.validateSession(authorization);
 
         if (session == null) {
-            throw new BadCredentialsException("Invalid session ID");
+            throw new BadCredentialsException("Invalid session");
         }
 
         if (!bookRepository.existsByIsbn(isbn)) {
@@ -85,6 +85,7 @@ public class BookService {
         checkout.setReturned(false);
         checkout.setDateCreated(Timestamp.from(Instant.now()));
         checkout.setDateDue(Timestamp.from(Instant.now().plusSeconds(86400 * 30)));
+        checkout.setDateReturned(null);
 
         checkoutRepository.save(checkout);
 
@@ -95,7 +96,7 @@ public class BookService {
         Session session = sessionService.validateSession(authorization);
 
         if (session == null) {
-            throw new BadCredentialsException("Invalid session ID");
+            throw new BadCredentialsException("Invalid session");
         }
 
         if (userRepository.findByUserID(session.getUserID()).getRole() != User.Role.ADMIN) {
@@ -113,6 +114,7 @@ public class BookService {
         }
 
         checkout.setReturned(true);
+        checkout.setDateReturned(Timestamp.from(Instant.now()));
 
         checkoutRepository.save(checkout);
     }

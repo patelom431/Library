@@ -12,12 +12,10 @@ import java.util.UUID;
 public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     Session findBySessionID(UUID sessionID);
-    Session findByUserID(UUID userID);
 
     Boolean existsBySessionID(UUID sessionID);
     Boolean existsByUserID(UUID userID);
 
-    void deleteBySessionID(UUID sessionID);
     @Modifying
     @Query("DELETE FROM Session s WHERE s.userID=:userID")
     void deleteByUserID(@Param("userID") UUID userID);

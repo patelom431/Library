@@ -9,33 +9,33 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api")
 public class BookController {
 
     @Autowired
     private BookService bookService;
 
-    @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    @GetMapping("/books")
+    public List<Book> getBooks() {
+        return bookService.getBooks();
     }
 
-    @GetMapping("/{isbn}")
+    @GetMapping("/book/{isbn}")
     public Book getBook(@PathVariable String isbn) {
         return bookService.getBook(isbn);
     }
 
     @PostMapping
-    public void addBook(@RequestHeader("Authorization") String authorization, @Valid @RequestBody Book book) {
-        bookService.addBook(authorization, book);
+    public void createBook(@RequestHeader("Authorization") String authorization, @Valid @RequestBody Book book) {
+        bookService.createBook(authorization, book);
     }
 
-    @PostMapping("/{isbn}/checkout")
+    @PostMapping("/book/{isbn}/checkout")
     public Checkout checkoutBook(@RequestHeader("Authorization") String authorization, @PathVariable String isbn) {
         return bookService.checkoutBook(authorization, isbn);
     }
 
-    @PostMapping("/{isbn}/return")
+    @PutMapping("/book/{isbn}/return")
     public void returnBook(@RequestHeader("Authorization") String authorization, @PathVariable UUID checkoutID) {
         bookService.returnBook(authorization, checkoutID);
     }

@@ -1,5 +1,6 @@
 package dev.om.library.session;
 
+import dev.om.library.book.Book;
 import dev.om.library.exception.BadCredentialsException;
 import dev.om.library.user.User;
 import dev.om.library.user.UserRepository;
@@ -20,6 +21,10 @@ public class SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    public Session getSession(UUID sessionID) {
+        return sessionRepository.findBySessionID(sessionID);
+    }
 
     @Transactional
     public Session createSession(User user) {

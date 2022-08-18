@@ -40,17 +40,21 @@ public class Checkout {
     @Column(name = "dateDue", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '30' DAY")
     private Timestamp dateDue;
 
+    @Column(name = "dateReturned", columnDefinition = "TIMESTAMP DEFAULT NULL")
+    private Timestamp dateReturned;
+
     public Checkout() {
 
     }
 
-    public Checkout(UUID checkoutID, UUID userID, String isbn, Boolean returned, Timestamp dateCreated, Timestamp dateDue) {
+    public Checkout(UUID checkoutID, UUID userID, String isbn, Boolean returned, Timestamp dateCreated, Timestamp dateDue, Timestamp dateReturned) {
         this.checkoutID = checkoutID;
         this.userID = userID;
         this.isbn = isbn;
         this.returned = returned;
         this.dateCreated = dateCreated;
         this.dateDue = dateDue;
+        this.dateReturned = dateReturned;
     }
 
 }
