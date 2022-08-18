@@ -1,6 +1,5 @@
 package dev.om.library.session;
 
-import dev.om.library.book.Book;
 import dev.om.library.exception.BadCredentialsException;
 import dev.om.library.user.User;
 import dev.om.library.user.UserRepository;

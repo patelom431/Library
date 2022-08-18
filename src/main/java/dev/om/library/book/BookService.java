@@ -20,13 +20,13 @@ import java.util.UUID;
 public class BookService {
 
     @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private SessionService sessionService;
-
-    @Autowired
-    private BookRepository bookRepository;
 
     @Autowired
     private CheckoutRepository checkoutRepository;
@@ -86,6 +86,34 @@ public class BookService {
         checkout.setDateCreated(Timestamp.from(Instant.now()));
         checkout.setDateDue(Timestamp.from(Instant.now().plusSeconds(86400 * 30)));
         checkout.setDateReturned(null);
+
+        checkoutRepository.save(checkout);
+
+        return checkout;
+    }
+
+    public Checkout renewBook(String authorization, UUID checkoutID) {
+        Session session = sessionService.validateSession(authorization);
+
+        if (session == null) {
+            throw new BadCredentialsException("Invalid session");
+        }
+
+        if (userRepository.findByUserID(session.getUserID()).getRole() != User.Role.ADMIN) {
+            throw new BadCredentialsException("Unauthorized");
+        }
+
+        if (!checkoutRepository.existsByCheckoutID(checkoutID)) {
+            throw new BadRequestException("Invalid checkout ID");
+        }
+
+        Checkout checkout = checkoutRepository.findByCheckoutID(checkoutID);
+
+        if (checkout.getReturned()) {
+            throw new BadRequestException("Book already returned");
+        }
+
+        checkout.setDateDue(Timestamp.from(Instant.now().plusSeconds(86400 * 30)));
 
         checkoutRepository.save(checkout);
 

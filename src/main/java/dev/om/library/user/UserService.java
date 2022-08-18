@@ -5,15 +5,12 @@ import dev.om.library.checkout.CheckoutService;
 import dev.om.library.exception.BadCredentialsException;
 import dev.om.library.exception.BadRequestException;
 import dev.om.library.session.Session;
-import dev.om.library.session.SessionRepository;
 import dev.om.library.session.SessionService;
-import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UserService {

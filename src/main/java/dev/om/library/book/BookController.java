@@ -35,7 +35,12 @@ public class BookController {
         return bookService.checkoutBook(authorization, isbn);
     }
 
-    @PutMapping("/book/{isbn}/return")
+    @PutMapping("/book/{checkoutID}/renew")
+    public Checkout renewBook(@RequestHeader("Authorization") String authorization, @PathVariable UUID checkoutID) {
+        return bookService.renewBook(authorization, checkoutID);
+    }
+
+    @PutMapping("/book/{checkoutID}/return")
     public void returnBook(@RequestHeader("Authorization") String authorization, @PathVariable UUID checkoutID) {
         bookService.returnBook(authorization, checkoutID);
     }
